@@ -25,7 +25,7 @@ pipeline
              stage('Info File Creation') {
 			      steps {
 			      	
-				      mkdir "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\%BuildNo%"
+				      bat '''mkdir "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\%BuildNo%"'''
 				      
 					
 				      bat 'echo %BuildNo% > Info.txt'		
