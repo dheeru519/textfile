@@ -25,11 +25,13 @@ pipeline
              stage('Info File Creation') {
 			      steps {
 			      	
-				      bat '''mkdir "C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\%BuildNo%"'''
+				      bat '''mkdir "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\%BuildNo%"'''
 				      
 					
 				      bat 'echo %BuildNo% > Info.txt'		
-				
+					
+				      bat 'echo "Get-Date" >> Info.txt'
+				      
 				      powershell 'Get-Date| Add-Content -Path C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt'
 				
 				      powershell '''ForEach-Object { Add-Content -Path "C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt" -Value "Calculation Engine Version: $env:BUILD_NUMBER","Author: $env:GIT_AUTHOR_NAME","Author Email: $GIT_COMMITTER_EMAIL","Github Repository: $env:GIT_URL","Commit Version: $env:GIT_COMMIT","Branch: $env:GIT_BRANCH" }'''
