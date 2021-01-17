@@ -21,6 +21,8 @@ pipeline
 			   
         			def Time = new Date()
         			println Time.format("yyyy-MM-dd.HH:mm:ss", TimeZone.getTimeZone('UTC'))
+				
+				
 
                      }
                }
@@ -33,15 +35,11 @@ pipeline
 					
 				      bat 'echo %BuildNo% > Info.txt'		
 					
-				      bat 'echo "$Date" >> Info.txt'
+				      bat 'echo "$BUILD_TIMESTAMP" >> Info.txt'
 				      
-				     
-    					script {
-        					def now = new Date()
-        					println now.format("yyMMdd.HHmm", TimeZone.getTimeZone('UTC'))
-   					}
- 
-				      bat 'echo "now" >> Info.txt'
+				      bat '"$BUILD_TIMESTAMP" >> Info.txt'
+				      
+				      bat '$BUILD_TIMESTAMP >> Info.txt'
 				      
 				      powershell 'Get-Date| Add-Content -Path C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt'
 				
