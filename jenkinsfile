@@ -30,7 +30,7 @@ pipeline
 					
 				      bat 'echo %BuildNo% > Info.txt'		
 					
-				      bat 'echo "Get-Date" >> Info.txt'
+				      bat 'Get-Date >> Info.txt'
 				      
 				      powershell 'Get-Date| Add-Content -Path C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt'
 				
