@@ -24,7 +24,7 @@ pipeline
             }   
              stage('Info File Creation') {
 			      steps {
-			      		C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput
+			      	
 				      mkdir "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\%BuildNo%"
 				      
 				      XCOPY "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\%BuildNo%"
