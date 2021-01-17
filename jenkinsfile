@@ -1,13 +1,13 @@
 pipeline 
 {
-agent { label "${DBNODE}" }
+	agent { label "${DBNODE}" }
 
-   parameters 
-    {
-    	string(name: 'MasterBuildNo', defaultValue: '1.0.$BUILD_NUMBER.0', description: 'Master Build Number ')
-      string(name: 'BuildNo', defaultValue: '1.0.$BUILD_NUMBER.0', description: 'Build Number ') 
+   	parameters 
+  	  {
+    		string(name: 'MasterBuildNo', defaultValue: '1.0.$BUILD_NUMBER.0', description: 'Master Build Number ')
+     		string(name: 'BuildNo', defaultValue: '1.0.$BUILD_NUMBER.0', description: 'Build Number ') 
  
-    }
+    	}
  
   stages {
   
@@ -42,4 +42,4 @@ agent { label "${DBNODE}" }
 			      }
 	         }	
   }
-  }
+  
