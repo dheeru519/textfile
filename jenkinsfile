@@ -1,3 +1,11 @@
+properties([parameters([
+  string(name: 'somestring', defaultValue: 'somevalue'),
+  [$class: 'DateParameterDefinition',
+   name: 'somedate',
+   dateFormat: 'yyyy-MM-dd',
+   defaultValue: 'LocalDate.now()']
+])])
+
 pipeline 
 {
 	agent any
@@ -20,7 +28,7 @@ pipeline
                            echo "BuildNo: ${BuildNo}"      
 			   
         			def Time = new Date()
-        			println Time.format("yyMMdd.HHmm", TimeZone.getTimeZone('UTC'))
+        			println Time.format("yyyy-MM-dd.HH:mm:ss", TimeZone.getTimeZone('UTC'))
 
                      }
                }
@@ -33,7 +41,7 @@ pipeline
 					
 				      bat 'echo %BuildNo% > Info.txt'		
 					
-				      bat 'echo "Date" >> Info.txt'
+				      bat 'echo "$Date" >> Info.txt'
 				      
 				     
     					script {
