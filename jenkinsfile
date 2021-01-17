@@ -9,7 +9,7 @@ pipeline
  
     	}
  
-  stages {
+  	stages {
   
    //Set master build name
             stage("Set Master Build Name") {
@@ -41,5 +41,5 @@ pipeline
 				      powershell '''Get-Content -Path "D:\\Jenkins\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt"'''
 			      }
 	         }	
-  }
-  
+  	}
+ }
