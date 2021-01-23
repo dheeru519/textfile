@@ -30,7 +30,7 @@ pipeline
 					{
 						bat 'echo %BuildNo% > Info.txt'
 						powershell '''ForEach-Object { Add-Content -Path ".\\Info.txt" -Value "Calculation Engine Version: $env:BUILD_NUMBER","Github Repository: $env:GIT_URL","Branch: $env:GIT_BRANCH" }'''			
-						bat label: '', returnStdout: true, script: 'git show -s --format= '%aN' HASH' >> Info.txt'	
+						bat label: '', returnStdout: true, script: 'git log --pretty=format:"%aN"' >> Info.txt'	
 						def file = readFile('Info.txt')
 						echo "file:$file"
 						def JOB_Details = file.readLines()
