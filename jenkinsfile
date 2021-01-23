@@ -28,53 +28,16 @@ pipeline
 				{
 				  	dir("Common")
 					{
-						 bat 'echo %BuildNo% > Info.txt'
-						 
-						 //env.GIT_COMMIT_MSG = bat label: '', returnStdout: true, script: 'git log -1 --pretty=%B ${GIT_COMMIT}'
-					 	 
-						 //def author = sh script: "git show -s --pretty=\"%an <%ae>\" ${GIT_COMMIT}", returnStdout: true
-						 
-						 
-				
- 							//def Author_Details = bat(
-							//script: 'git show --name-only',
-							//returnStdout: true).split('\r\n')[2].trim()
-							//echo "Author_Details: ${Author_Details}" 
-							
-							 //bat 'echo ${COMMITTER_EMAIL} >> Info.txt'
-							
-							 bat label: '', returnStdout: true, script: 'git show --name-only >> Info.txt'
-							
-							 def file = readFile('Info.txt')
-							 echo "file:$file"
-							 def JOB_Details = file.readLines()
-							 echo "JOB_Details:$JOB_Details"
+						bat 'echo %BuildNo% > Info.txt'
+						powershell '''ForEach-Object { Add-Content -Path ".\\Info.txt" -Value "Calculation Engine Version: $env:BUILD_NUMBER","Github Repository: $env:GIT_URL","Branch: $env:GIT_BRANCH" }'''			
+						bat label: '', returnStdout: true, script: 'git show --name-only >> Info.txt'	
+						def file = readFile('Info.txt')
+						echo "file:$file"
+						def JOB_Details = file.readLines()
+						echo "JOB_Details:$JOB_Details" 
+						powershell '''Get-Content -Path ".\\Info.txt"'''
 							 
-							 
-							 
-							 //def AUTHOR_NAME = bat(
-							 //script: returnStdout: true, "git log -1 --pretty=format:'%an'" >>  Info.txt"
-							 //returnStdout: true).split('\r\n')[2].trim() 
-							 //echo "AUTHOR_NAME: ${AUTHOR_NAME}" 
-							 //def Author = readFile('Info.txt')
-							 //def GITinfo = Author.readLines()
-							 //echo "GITinfo:$GITinfo"
-
-						 
-							 //bat label: '', returnStdout: true, script: 'git log -1 >> Info.txt'
-							 //def file = readFile('Info.txt')
-							 //def GITinfo = file.readLines()
-							 //echo "GITinfo:$GITinfo"	
-
-
-							 //powershell 'Get-Date| Add-Content -Path .\\Info.txt'
-
-							 powershell '''ForEach-Object { Add-Content -Path ".\\Info.txt" -Value "Calculation Engine Version: $env:BUILD_NUMBER","Github Repository: $env:GIT_URL","Commit Version: $env:GIT_COMMIT","Branch: $env:GIT_BRANCH" }'''
-
-							 powershell '''Get-Content -Path ".\\Info.txt"'''
-							 
-				
-               				}
+         				}
 			}	
 		   
     		}
