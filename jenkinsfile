@@ -1,7 +1,7 @@
 import java.io.File
 pipeline 
 {
-    agent { label DBNODE } 
+    agent any 
     options { 
         disableConcurrentBuilds() 
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '10'))
