@@ -1,60 +1,95 @@
+import java.io.File
 pipeline 
 {
-	agent any
+    agent { label DBNODE } 
+    options { 
+        disableConcurrentBuilds() 
+        buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '10'))
+    }
+    parameters {
+        string(name: 'BuildNo', defaultValue: '1.0.$BUILD_NUMBER.0', description: 'Build Number')
+    }
+    stages { 
+        stage("Set Build Name") {
+            steps 
+            {
+                script {
+                    currentBuild.displayName = "1.0.${BUILD_NUMBER}.0" 
+		    def scmVars = checkout scm
+  		    echo 'scm : the commit id is ' +scmVars.GIT_COMMIT
+ 		    echo 'scm : the commit branch  is ' +scmVars.GIT_BRANCH
+  	            echo 'scm : the previous commit id is ' +scmVars.GIT_PREVIOUS_COMMIT
+                }
+            }
+        }	
+        stage('Info File Creation') {
+		steps {
+			script
+				{
+				  	dir("Common")
+					{
+						 bat 'echo %BuildNo% > Info.txt'
+						 
+						 //env.GIT_COMMIT_MSG = bat label: '', returnStdout: true, script: 'git log -1 --pretty=%B ${GIT_COMMIT}'
+					 	 
+						 //def author = sh script: "git show -s --pretty=\"%an <%ae>\" ${GIT_COMMIT}", returnStdout: true
+						 
+						 
+				
+ 							//def Author_Details = bat(
+							//script: 'git show --name-only',
+							//returnStdout: true).split('\r\n')[2].trim()
+							//echo "Author_Details: ${Author_Details}" 
+							
+							 //bat 'echo ${COMMITTER_EMAIL} >> Info.txt'
+							
+							 bat label: '', returnStdout: true, script: 'git show --name-only >> Info.txt'
+							
+							 def file = readFile('Info.txt')
+							 echo "file:$file"
+							 def JOB_Details = file.readLines()
+							 echo "JOB_Details:$JOB_Details"
+							 
+							 
+							 
+							 //def AUTHOR_NAME = bat(
+							 //script: returnStdout: true, "git log -1 --pretty=format:'%an'" >>  Info.txt"
+							 //returnStdout: true).split('\r\n')[2].trim() 
+							 //echo "AUTHOR_NAME: ${AUTHOR_NAME}" 
+							 //def Author = readFile('Info.txt')
+							 //def GITinfo = Author.readLines()
+							 //echo "GITinfo:$GITinfo"
 
-	parameters 
-  	{
-    		string(name: 'MasterBuildNo', defaultValue: '1.0.$BUILD_NUMBER.0', description: 'Master Build Number ')
-     		string(name: 'BuildNo', defaultValue: '1.0.$BUILD_NUMBER.0', description: 'Build Number ') 
- 
-    	}
- 
-  	stages {
-  
-   //Set master build name
-            stage("Set Master Build Name") {
-               steps {
-                     script {
-                           currentBuild.displayName=MasterBuildNo
+						 
+							 //bat label: '', returnStdout: true, script: 'git log -1 >> Info.txt'
+							 //def file = readFile('Info.txt')
+							 //def GITinfo = file.readLines()
+							 //echo "GITinfo:$GITinfo"	
 
-                           echo "BuildNo: ${BuildNo}"      
-			   
-        			def Time = new Date()
-        			println Time.format("yyyy-MM-dd.HH:mm:ss", TimeZone.getTimeZone('UTC'))
-				
-				
 
-                     }
-               }
-            }   
-             stage('Info File Creation') {
-			      steps {
-			      	
-				      bat '''mkdir "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\%BuildNo%"'''
-				      
-					
-				      bat 'echo %BuildNo% > Info.txt'		
-					
-				      bat 'echo "$BUILD_TIMESTAMP" >> Info.txt'
-				      
-				      bat '"$BUILD_TIMESTAMP" >> Info.txt'
-				      
-				      bat '$BUILD_TIMESTAMP >> Info.txt'
-				      
-				      powershell 'Get-Date| Add-Content -Path C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt'
+							 //powershell 'Get-Date| Add-Content -Path .\\Info.txt'
+
+							 powershell '''ForEach-Object { Add-Content -Path ".\\Info.txt" -Value "Calculation Engine Version: $env:BUILD_NUMBER","Github Repository: $env:GIT_URL","Commit Version: $env:GIT_COMMIT","Branch: $env:GIT_BRANCH" }'''
+
+							 powershell '''Get-Content -Path ".\\Info.txt"'''
+							 
 				
-				      powershell '''ForEach-Object { Add-Content -Path "C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt" -Value "Calculation Engine Version: $env:BUILD_NUMBER","Author: $env:GIT_AUTHOR_NAME","Author Email: $GIT_COMMITTER_EMAIL","Github Repository: $env:GIT_URL","Commit Version: $env:GIT_COMMIT","Branch: $env:GIT_BRANCH" }'''
-				
-				      powershell '$UtcTime = Get-Date'
-				
-				      powershell '$UtcTime.ToUniversalTime()'
-				
-				      powershell '$UtcTime.ToUniversalTime() >> C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt'
-				
-				      powershell 'timestamp {"Date: $(Get-Date -Format G)"} >> C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt'
-				
-				      powershell '''Get-Content -Path "C:\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\JenkinsOutput\\$env:BUILD_NUMBER\\Info.txt"'''
-			      }
-	         }	
-  	}
- }
+               				}
+			}	
+		   
+    		}
+	}
+
+   /* post {      
+            success {
+                archiveArtifacts 'common\\wise scripts\\*.exe'
+		 
+                emailext attachLog: true, body: '$DEFAULT_CONTENT', recipientProviders: [developers(), requestor()], replyTo: '$DEFAULT_REPLYTO', subject: '$DEFAULT_SUBJECT', to: 'Vijay.Bojjagani@carrier.com,Robert.Howe@carrier.com,Achalu.K.Tirfe@Carrier.com'
+
+            }
+          	 failure {
+                emailext attachLog: true, body: '$DEFAULT_CONTENT', recipientProviders: [developers(), requestor()], replyTo: '$DEFAULT_REPLYTO', subject: '$DEFAULT_SUBJECT', to: 'shiva.kirla@carrier.com,Vijay.Bojjagani@carrier.com,Robert.Howe@carrier.com,Achalu.K.Tirfe@Carrier.com'
+            	} 
+    } */
+}
+}
