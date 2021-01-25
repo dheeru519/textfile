@@ -28,7 +28,6 @@ pipeline
 				{
 				  	dir("Common")
 					{
-						bat '''mkdir "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\Common\\%BUILD_NUMBER%"'''
 						bat 'echo %BuildNo% > Info.txt'
 						powershell '''ForEach-Object { Add-Content -Path "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\Common\\%BUILD_NUMBER%\\Info.txt" -Value "Calculation Engine Version: $env:BUILD_NUMBER","Github Repository: $env:GIT_URL","Branch: $env:GIT_BRANCH" }'''			
 						bat label: '', returnStdout: true, script: 'git log -1 >> Info.txt'	
