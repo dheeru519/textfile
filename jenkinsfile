@@ -18,7 +18,7 @@ pipeline
 
 					SET HTTPS_PROXY=http://servproxy.carcgl.com:80
 					echo "Create a DBBackup"
-					cd "E:\DBBackup\\MongoDB"
+					cd "E:\\DBBackup\\MongoDB"
 					mongodump --uri="mongodb+srv://dbUser:Nfs5YEyvdZJgiqxk@cluster0.ozth0.mongodb.net/dPDR_Qa" & ren dump dump_%time:~0,2%%time:~3,2%-%DATE:/=%
 					if %errorlevel% neq 0 exit /b %errorlevel%
 					echo "Mongodb backup created successfully" '''
