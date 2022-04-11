@@ -14,8 +14,7 @@ pipeline
 		steps {
 				script
 				{
-  					sh '''#!/bin/bash
-
+  				    bat'''
 					SET HTTPS_PROXY=http://servproxy.carcgl.com:80
 					echo "Create a DBBackup"
 					cd "E:\\DBBackup\\MongoDB"
