@@ -9,50 +9,22 @@ pipeline
     parameters {
         string(name: 'BuildNo', defaultValue: '1.0.$BUILD_NUMBER.0', description: 'Build Number')
     }
-    stages { 
-        stage("Set Build Name") {
-            steps 
-            {
-                script {
-                    currentBuild.displayName = "1.0.${BUILD_NUMBER}.0" 
-		    def scmVars = checkout scm
-  		    echo 'scm : the commit id is ' +scmVars.GIT_COMMIT
- 		    echo 'scm : the commit branch  is ' +scmVars.GIT_BRANCH
-  	            echo 'scm : the previous commit id is ' +scmVars.GIT_PREVIOUS_COMMIT
-                }
-            }
-        }	
-        stage('Info File Creation') {
+    stages {
+
+        stage('MongoDB Backup Creation') {
 		steps {
-			script
+				script
 				{
-				  	dir("Common")
-					{
-						bat '''mkdir "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\Common\\%BUILD_NUMBER%"'''
-						bat 'echo %BuildNo% > Info.txt'
-						powershell '''ForEach-Object { Add-Content -Path "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\Common\\%BUILD_NUMBER%\\Info.txt" -Value "Calculation Engine Version: $env:BUILD_NUMBER","Github Repository: $env:GIT_URL","Branch: $env:GIT_BRANCH" }'''			
-						bat label: '', returnStdout: true, script: 'git log -1 >> Info.txt'	
-						def file = readFile('Info.txt')
-						echo "file:$file"
-						def JOB_Details = file.readLines()
-						echo "JOB_Details:$JOB_Details" 
-						powershell '''Get-Content -Path "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\Common\\%BUILD_NUMBER%\\Info.txt"'''
-         				}
-			}	
-		   
-    		}
-	}
+  					sh '''#!/bin/bash
 
-   /* post {      
-            success {
-                archiveArtifacts 'common\\wise scripts\\*.exe'
-		 
-                emailext attachLog: true, body: '$DEFAULT_CONTENT', recipientProviders: [developers(), requestor()], replyTo: '$DEFAULT_REPLYTO', subject: '$DEFAULT_SUBJECT', to: 'Vijay.Bojjagani@carrier.com,Robert.Howe@carrier.com,Achalu.K.Tirfe@Carrier.com'
-
-            }
-          	 failure {
-                emailext attachLog: true, body: '$DEFAULT_CONTENT', recipientProviders: [developers(), requestor()], replyTo: '$DEFAULT_REPLYTO', subject: '$DEFAULT_SUBJECT', to: 'shiva.kirla@carrier.com,Vijay.Bojjagani@carrier.com,Robert.Howe@carrier.com,Achalu.K.Tirfe@Carrier.com'
-            	} 
-    } */
-}
+					SET HTTPS_PROXY=http://servproxy.carcgl.com:80
+					echo "Create a DBBackup"
+					//cd "D:\\MongoDB\\DB_Backups\\backup"
+					mongodump --uri="mongodb+srv://dbUser:Nfs5YEyvdZJgiqxk@cluster0.ozth0.mongodb.net/dPDR_Qa" & ren dump dump_%time:~0,2%%time:~3,2%-%DATE:/=%
+					if %errorlevel% neq 0 exit /b %errorlevel%
+					echo "Mongodb backup created successfully" '''
+				}
+        	}
+    	}
+    }
 }
