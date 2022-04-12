@@ -17,7 +17,7 @@ pipeline
   				    bat'''
 					echo "Create a DBBackup"
 					cd "E:\\DBBackup\\MongoDB\\backup"
-					mongodump --uri="mongodb+srv://dbUser:Nfs5YEyvdZJgiqxk@cluster0.ozth0.mongodb.net/dPDR_Qa" 
+					mongodump --uri="mongodb+srv://dbUser:Nfs5YEyvdZJgiqxk@cluster0.ozth0.mongodb.net/dPDR_Qa" '''
 				}
         	}
     	}
