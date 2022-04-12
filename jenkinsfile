@@ -18,7 +18,7 @@ pipeline
 					echo "Back up creating"					
 					mongodump --uri="mongodb+srv://dbUser:Nfs5YEyvdZJgiqxk@cluster0.ozth0.mongodb.net/dPDR_Qa" && ren dump dump_%date:~10,4%%date:~7,2%%date:~4,2%-%time:~0,2%%time:~3,2%
 					echo "Back up created"	
-					move "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\dump_%date:~10,4%%date:~7,2%%date:~4,2%-%time:~0,2%%time:~3,2%" "E:\\DBBackup\\MongoDB\\backup" 
+					xcopy "C:\\Windows\\System32\\config\\systemprofile\\AppData\\Local\\Jenkins\\.jenkins\\workspace\\jenkinsfilecreation\\dump_%date:~10,4%%date:~7,2%%date:~4,2%-%time:~0,2%%time:~3,2%" "E:\\DBBackup\\MongoDB\\backup" 
 					echo "Back up moved to E drive"	
 					'''
 				}
