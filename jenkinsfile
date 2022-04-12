@@ -18,7 +18,7 @@ pipeline
 					echo "Back up creating"					
 					mongodump --uri="mongodb+srv://dbUser:Nfs5YEyvdZJgiqxk@cluster0.ozth0.mongodb.net/dPDR_Qa" 
 					echo "Back up created"	
-					move . "E:\\DBBackup\\MongoDB\\backup" 
+					xcopy . "E:\\DBBackup\\MongoDB\\backup" 
 					echo "Back up moved to E drive"	
 					'''
 				}
